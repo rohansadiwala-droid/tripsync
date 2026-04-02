@@ -1,15 +1,17 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { Itinerary } from '../types';
 
-// 1. Updated to the Vite-specific environment variable syntax
 const apiKey = import.meta.env.VITE_API_KEY; 
 
 if (!apiKey) {
-  throw new Error("API_KEY environment variable not set");
+  // FIXED: Throw a raw string, not an Error object
+  throw "API_KEY environment variable not set"; 
 }
 
 const genAI = new GoogleGenerativeAI(apiKey);
-const ai = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+// FIXED: Using the correct, existing model name
+const ai = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Function 1: For the Trip Planner
 export async function generateItinerary(destination: string, duration: number, interests: string): Promise<Itinerary> {
@@ -20,22 +22,19 @@ export async function generateItinerary(destination: string, duration: number, i
     const response = await result.response;
     const text = response.text();
     
-    // CRASH-PROOFING: Extract only the JSON block, ignoring conversational text
     const jsonMatch = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
     if (!jsonMatch) {
-      throw new Error("AI did not return a valid data format.");
+      throw "AI did not return a valid data format.";
     }
     
     return JSON.parse(jsonMatch[0]);
     
   } catch (error: any) {
     console.error("AI Error Details:", error);
-    // Ensure we throw a safe string, not an object that crashes React
-    throw new Error(error.message || "Failed to generate itinerary.");
+    // CRITICAL FIX: Throwing a raw string so React does not crash the screen!
+    throw (error.message || "Failed to generate itinerary. Please try again.");
   }
 }
-
-// ... Keep your other two functions (getConversionRates & generatePackingSuggestions) below ...
 
 // Function 2: For the Expense Splitter
 export async function getConversionRates(baseCurrency: string, targetCurrencies: string[]) {
