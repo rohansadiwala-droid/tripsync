@@ -14,16 +14,28 @@ const ai = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 // Function 1: For the Trip Planner
 export async function generateItinerary(destination: string, duration: number, interests: string): Promise<Itinerary> {
   const prompt = `Create a ${duration}-day travel itinerary for ${destination} focusing on ${interests}. Return ONLY a valid JSON object with an 'itinerary' array.`;
+  
   try {
     const result = await ai.generateContent(prompt);
     const response = await result.response;
-    const text = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
-    return JSON.parse(text);
-  } catch (error) {
-    console.error("AI Error:", error);
-    throw error;
+    const text = response.text();
+    
+    // CRASH-PROOFING: Extract only the JSON block, ignoring conversational text
+    const jsonMatch = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+    if (!jsonMatch) {
+      throw new Error("AI did not return a valid data format.");
+    }
+    
+    return JSON.parse(jsonMatch[0]);
+    
+  } catch (error: any) {
+    console.error("AI Error Details:", error);
+    // Ensure we throw a safe string, not an object that crashes React
+    throw new Error(error.message || "Failed to generate itinerary.");
   }
 }
+
+// ... Keep your other two functions (getConversionRates & generatePackingSuggestions) below ...
 
 // Function 2: For the Expense Splitter
 export async function getConversionRates(baseCurrency: string, targetCurrencies: string[]) {
