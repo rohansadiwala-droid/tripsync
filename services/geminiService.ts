@@ -1,7 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { Itinerary } from '../types';
 
-const apiKey = process.env.API_KEY; 
+// 1. Updated to the Vite-specific environment variable syntax
+const apiKey = import.meta.env.VITE_API_KEY; 
 
 if (!apiKey) {
   throw new Error("API_KEY environment variable not set");
@@ -38,7 +39,7 @@ export async function getConversionRates(baseCurrency: string, targetCurrencies:
   }
 }
 
-// Function 3: The missing function for the Shared Packing Lists!
+// Function 3: For the Shared Packing Lists
 export async function generatePackingSuggestions(destination: string, duration: number) {
   try {
     const prompt = `Suggest a packing list for a ${duration}-day trip to ${destination}. Return ONLY a valid JSON array of strings, where each string is a packing item.`;
