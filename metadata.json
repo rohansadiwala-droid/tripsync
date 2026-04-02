@@ -1,0 +1,5 @@
+{
+  "name": "TripSync: AI Travel Planner & Expense Splitter",
+  "description": "A smart travel companion with AI itinerary generation, group expense splitting, and offline support (PWA). Features real-time notifications and secure login validation.",
+  "requestFramePermissions": []
+}
