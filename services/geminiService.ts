@@ -2,40 +2,37 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { Itinerary } from '../types';
 
-// Ensure the API key is available from environment variables
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
+// 1. Ensure the name here matches your AWS Environment Variable
+const apiKey = process.env.API_KEY; 
+
+if (!apiKey) {
+  throw new Error("API_KEY environment variable not set");
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// 2. Use the correct Class name: GoogleGenerativeAI
+const genAI = new GoogleGenerativeAI(apiKey);
+const ai = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+// 3. Fix the Schema types (Use string literals like "object" and "array")
 const itinerarySchema = {
-    type: Type.OBJECT,
-    properties: {
-        itinerary: {
-            type: Type.ARRAY,
-            description: "An array of daily plans for the trip.",
-            items: {
-                type: Type.OBJECT,
-                properties: {
-                    day: { type: Type.STRING, description: "e.g., Day 1" },
-                    title: { type: Type.STRING, description: "A catchy title for the day's theme." },
-                    activities: {
-                        type: Type.ARRAY,
-                        items: { type: Type.STRING },
-                        description: "List of 3-4 key activities and places to visit."
-                    },
-                    food: {
-                        type: Type.ARRAY,
-                        items: { type: Type.STRING },
-                        description: "List of 2-3 restaurant or food suggestions for the day (e.g., Breakfast, Lunch, Dinner)."
-                    }
-                },
-                 required: ["day", "title", "activities", "food"]
-            }
-        }
-    },
-    required: ["itinerary"]
+  type: "object",
+  properties: {
+    itinerary: {
+      type: "array",
+      description: "An array of daily plans for the trip.",
+      items: {
+        type: "object",
+        properties: {
+          day: { type: "string" },
+          title: { type: "string" },
+          activities: { type: "array", items: { type: "string" } },
+          food: { type: "array", items: { type: "string" } }
+        },
+        required: ["day", "title", "activities", "food"]
+      }
+    }
+  },
+  required: ["itinerary"]
 };
 
 export async function generateItinerary(
