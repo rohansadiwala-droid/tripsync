@@ -6,7 +6,7 @@ import ItineraryPlanner from './components/ItineraryPlanner';
 import ExpenseSplitter from './components/ExpenseSplitter';
 import LoginModal from './components/LoginModal';
 import SharedLists from './components/SharedLists';
-import { NotificationProvider } from './components/NotificationProvider';
+import { NotificationProvider, useNotification } from './components/NotificationProvider';
 import type { Itinerary, User, TodoItem } from './types';
 
 interface HeaderProps {
