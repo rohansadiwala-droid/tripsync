@@ -2,11 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import { Plane, Wallet, UserCircle, LogOut, ClipboardList, WifiOff } from 'lucide-react';
-import ItineraryPlanner from './components/ItineraryPlanner';
-import ExpenseSplitter from './components/ExpenseSplitter';
-import LoginModal from './components/LoginModal';
-import SharedLists from './components/SharedLists';
-import { NotificationProvider, useNotification } from './components/NotificationProvider';
+import ItineraryPlanner from './ItineraryPlanner';
+import ExpenseSplitter from './ExpenseSplitter';
+import LoginModal from './LoginModal';
+import SharedLists from './SharedLists';
+import { NotificationProvider, useNotification } from './NotificationProvider';
 import type { Itinerary, User, TodoItem } from './types';
 
 interface HeaderProps {
