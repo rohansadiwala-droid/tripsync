@@ -24,7 +24,7 @@ export async function generateItinerary(destination: string, duration: number, i
   }
 }
 
-// Function 2: The missing function for the Expense Splitter!
+// Function 2: For the Expense Splitter
 export async function getConversionRates(baseCurrency: string, targetCurrencies: string[]) {
   try {
     const prompt = `Provide the current exchange rates from ${baseCurrency} to ${targetCurrencies.join(', ')}. Return ONLY a valid JSON object where keys are currency codes and values are the numerical exchange rate.`;
@@ -34,7 +34,20 @@ export async function getConversionRates(baseCurrency: string, targetCurrencies:
     return JSON.parse(text);
   } catch (error) {
     console.error("Failed to fetch conversion rates:", error);
-    // Return a safe fallback object so the app doesn't crash if the AI fails
     return {};
+  }
+}
+
+// Function 3: The missing function for the Shared Packing Lists!
+export async function generatePackingSuggestions(destination: string, duration: number) {
+  try {
+    const prompt = `Suggest a packing list for a ${duration}-day trip to ${destination}. Return ONLY a valid JSON array of strings, where each string is a packing item.`;
+    const result = await ai.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+    return JSON.parse(text);
+  } catch (error) {
+    console.error("Failed to fetch packing suggestions:", error);
+    return [];
   }
 }
