@@ -9,7 +9,7 @@ if (!apiKey) {
 }
 
 const genAI = new GoogleGenerativeAI(apiKey);
-const ai = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const ai = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 // Function 1: For the Trip Planner
 export async function generateItinerary(destination: string, duration: number, interests: string): Promise<Itinerary> {
