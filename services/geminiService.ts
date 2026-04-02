@@ -1,5 +1,5 @@
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { Itinerary } from '../types';
 
 // Ensure the API key is available from environment variables
